@@ -14,23 +14,26 @@ export default function Login(props) {
 
     const handleChange = event => {
         setLogin({
-            ...login,
-            [event.targt.name]: event.target.value
-        })
-    };
+          ...login,
+          [event.target.name]: event.target.value
+        });
+      };
 
     //line 13 - add handleSubmit
     const handleSubmit = event => {
         event.preventDefault();
-        axiosWithAuth().post().then(response => {
-            console.log('response', response)
-            localStorage.setItem('token', response.data.payload)
-            props.history.push('/dashboard'); 
-            // dashboard now has be made a protected route
+        axiosWithAuth()
+            .post('login', login)
+            .then(response => {
+                console.log("response", response)
+                localStorage.setItem('token', response.data.payload)
+                props.history.push("/creatures"); 
+            // creatures now has be made a protected route
             // props.history.push re-directs you to another page
-        }).catch(error => {
-            console.log(`login error: ${error}`)
-        })
+            })
+            .catch(error => {
+                console.log(`login error: ${error}`);
+            });
     };
 
     
@@ -44,6 +47,7 @@ export default function Login(props) {
                 placeholder="username" 
                 name="username" 
                 value={login.username} 
+                label="username"
                 onChange={handleChange} 
                 className="input"
                 />
@@ -52,11 +56,12 @@ export default function Login(props) {
                 placeholder="password" 
                 name="password" 
                 value={login.password} 
+                label="password"
                 onChange={handleChange} 
                 className="input"
                 />
                 <button className='start'>Login</button>
             </form>
         </div>
-    )
+    );
 }
